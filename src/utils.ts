@@ -5,6 +5,9 @@
 
 export const isArray = Array.isArray;
 
+export const isDef = <T>(val: T): val is Exclude<T, undefined> =>
+  typeof val !== 'undefined';
+
 const hasOwnProperty = Object.prototype.hasOwnProperty;
 export const hasOwn = (
   val: object,
