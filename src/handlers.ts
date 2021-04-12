@@ -23,10 +23,8 @@ const hijacker = {
             const p = item[key];
             if (isDef(p)) map[p] = len + index;
           });
-          console.log(key, map);
         }
       });
-      console.log('hook11', maps, args);
     }
     return Array.prototype.push.apply(this, args);
   },
@@ -42,7 +40,6 @@ const hijacker = {
       const map = (maps[key] || {})[Flags.RAW];
       if (map) res = map[value];
     }
-    console.log(11111, key, res);
     if (res === -1) res = Array.prototype.indexOf.apply(this, args as any);
     return res;
   },
@@ -56,11 +53,7 @@ const keyHandlers: ProxyHandler<object> = {
     let res = Reflect.get(target, key, receiver);
     if (!isDef(res)) return res;
     const rootTargetReactive = Reflect.get(target, Flags.ROOT, receiver);
-
     res = rootTargetReactive[res];
-
-    console.log('keyHandlers', res, rootTargetReactive);
-
     return res;
   },
 };
@@ -107,7 +100,6 @@ export const mapsHandlers: ProxyHandler<object> = {
     const targetIsArray = isArray(target);
     if (!targetIsArray) return res;
     if (hasOwn(hijacker, key)) {
-      console.log(key);
       return Reflect.get(hijacker, key, receiver);
     } else if (key === 'maps') {
       res = Reflect.get(target, Flags.MAPS, receiver);
@@ -118,7 +110,6 @@ export const mapsHandlers: ProxyHandler<object> = {
         });
         res = createReactiveObject(maps, keysHandlers);
         Object.defineProperty(target, Flags.MAPS, { value: res });
-        // console.log(`created ${key}`, res);
       }
     }
 
