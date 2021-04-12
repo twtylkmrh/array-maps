@@ -67,6 +67,8 @@ async function publishPackage(version, runIfNotDry) {
         ...(releaseTag ? ['--tag', releaseTag] : []),
         '--access',
         'public',
+        '--registry',
+        'https://registry.npmjs.org',
       ],
       {
         cwd: pkgRoot,
